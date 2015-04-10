@@ -7,17 +7,22 @@
 //
 
 #import "VPickerView.h"
+typedef NS_ENUM(NSInteger, VPickerType){
+    VPickerTypeSingleCols,
+    VPickerTypeMutiColsFromArray,
+    VPickerTypeMutiColsFromDic,
+    VPickerTypeDate
+};
+
 
 #define ZHToobarHeight 40
 
 @interface VPickerView ()<UIPickerViewDelegate,UIPickerViewDataSource>
 
 @property (nonatomic, copy)    NSString    *plistName;
-@property (nonatomic, strong)  NSArray     *plistArray;
+@property (nonatomic, strong)  NSArray     *dataSource; //picker数据源
 
-@property (nonatomic, assign) BOOL isLevelArray;
-@property (nonatomic, assign) BOOL isLevelString;
-@property (nonatomic, assign) BOOL isLevelDic;
+@property (nonatomic, assign) VPickerType pickerType;
 
 @property (nonatomic, strong) NSDictionary *levelTwoDic;
 @property (nonatomic, strong) UIToolbar *toolbar;
@@ -38,11 +43,11 @@
 
 @implementation VPickerView
 
--(NSArray *)plistArray{
-    if (_plistArray==nil) {
-        _plistArray=[[NSArray alloc] init];
+-(NSArray *)dataSource{
+    if (_dataSource == nil) {
+        _dataSource=[[NSArray alloc] init];
     }
-    return _plistArray;
+    return _dataSource;
 }
 
 -(NSArray *)componentArray{
@@ -61,14 +66,12 @@
 }
 
 -(instancetype)initPickviewWithPlistName:(NSString *)plistName{
-    
     self=[super init];
     if (self) {
         _plistName = plistName;
-        self.plistArray=[self getPlistArrayByplistName:plistName];
+        self.dataSource=[self getPlistArrayByplistName:plistName];
         [self setUpPickView];
         [self setViewFrame];
-        
     }
     return self;
 }
@@ -76,7 +79,7 @@
 -(instancetype)initPickviewWithArray:(NSArray *)array{
     self=[super init];
     if (self) {
-        self.plistArray = array;
+        self.dataSource = array;
         [self setArrayClass:array];
         [self setUpPickView];
         [self setViewFrame];
@@ -95,13 +98,7 @@
     return self;
 }
 
-
 -(void)remove{
-    
-    if ([self.delegate respondsToSelector:@selector(pickerView:resultSelectedRow:)]) {
-        [self.delegate pickerView:self resultSelectedRow:[_pickerView selectedRowInComponent:0]];
-    }
-    
     [self removeFromSuperview];
 }
 
@@ -114,6 +111,39 @@
 #pragma mark - actions
 
 -(void)doneClick{
+    
+    if (_pickerView) {
+        if (_resultString == nil) {
+            if (self.pickerType == VPickerTypeMutiColsFromArray) {
+                _resultString=@"";
+                for (int i=0; i<_dataSource.count;i++) {
+                    _resultString=[NSString stringWithFormat:@"%@-%@",_resultString, _dataSource[i][0]];
+                }
+                
+            } else if (self.pickerType == VPickerTypeSingleCols){
+                _resultString = [NSString stringWithFormat:@"%@",_dataSource[0]];
+                
+            }else if(self.pickerType == VPickerTypeMutiColsFromDic){
+                
+                if (_state==nil) {
+                    _state =_dicKeyArray[0][0];
+                    NSDictionary *dicValueDic=_dataSource[0];
+                    _city = [dicValueDic allValues][0][0];
+                }
+                if (_city==nil){
+                    NSInteger cIndex = [_pickerView selectedRowInComponent:0];
+                    NSDictionary *dicValueDic = _dataSource[cIndex];
+                    _city=[dicValueDic allValues][0][0];
+                }
+                
+                _resultString=[NSString stringWithFormat:@"%@%@",_state,_city];
+            }
+        }
+    }
+    else if (_datePicker) {
+        _resultString=[NSString stringWithFormat:@"%@",_datePicker.date];
+    }
+
     
 //    if (_pickerView) {
 //        
@@ -147,10 +177,151 @@
 //    else if (_datePicker) {
 //        _resultString=[NSString stringWithFormat:@"%@",_datePicker.date];
 //    }
+//    
+    
+    if ([self.delegate respondsToSelector:@selector(pickerView:resultSelectedRow:)]) {
+        [self.delegate pickerView:self resultSelectedRow:[_pickerView selectedRowInComponent:0]];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(pickerView:resultString:)]) {
+        
+        if ([_resultString hasPrefix:@"-"]) {
+            _resultString = [_resultString substringFromIndex:1];
+        }
+        
+        [self.delegate pickerView:self resultString:_resultString];
+    }
+    
     
     [self remove];
 }
 
+
+#pragma mark piackView 数据源方法
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    
+    NSInteger component;
+    if (self.pickerType == VPickerTypeMutiColsFromArray) {
+        component = _dataSource.count;
+        
+    } else if (self.pickerType == VPickerTypeSingleCols){
+        component = 1;
+        
+    }else if(self.pickerType == VPickerTypeMutiColsFromDic){
+        component = [_levelTwoDic allKeys].count * 2;
+    }
+    
+    return component;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    NSArray *rowArray = [[NSArray alloc] init];
+    
+    if (self.pickerType == VPickerTypeMutiColsFromArray) {
+        rowArray = _dataSource[component];
+        
+    } else if (self.pickerType == VPickerTypeSingleCols){
+        rowArray = _dataSource;
+        
+    }else if(self.pickerType == VPickerTypeMutiColsFromDic){
+        
+        NSInteger pIndex = [pickerView selectedRowInComponent:0];
+        NSDictionary *dic=_dataSource[pIndex];
+        for (id dicValue in [dic allValues]) {
+            if ([dicValue isKindOfClass:[NSArray class]]) {
+                if (component%2==1) {
+                    rowArray=dicValue;
+                }else{
+                    rowArray=_dataSource;
+                }
+            }
+        }
+    }
+    return rowArray.count;
+}
+
+#pragma mark UIPickerViewdelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    
+    NSString *rowTitle = nil;
+    
+    if (self.pickerType == VPickerTypeMutiColsFromArray) {
+        
+        rowTitle = _dataSource[component][row];
+        
+    } else if (self.pickerType == VPickerTypeSingleCols){
+        
+        rowTitle=_dataSource[row];
+        
+    }else if(self.pickerType == VPickerTypeMutiColsFromDic){
+        
+        NSInteger pIndex = [pickerView selectedRowInComponent:0];
+        NSDictionary *dic=_dataSource[pIndex];
+        
+        if(component%2==0){
+            rowTitle=_dicKeyArray[row][component];
+        }
+        
+        for (id aa in [dic allValues]) {
+            if ([aa isKindOfClass:[NSArray class]]&&component%2==1){
+                NSArray *bb=aa;
+                if (bb.count>row) {
+                    rowTitle=aa[row];
+                }
+            }
+        }
+    }
+    
+    return rowTitle;
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    
+    if (self.pickerType == VPickerTypeMutiColsFromDic && component%2 == 0) {
+        [pickerView reloadComponent:1];
+        [pickerView selectRow:0 inComponent:1 animated:YES];
+    }
+    
+    if (self.pickerType == VPickerTypeSingleCols) {
+        
+        _resultString = _dataSource[row];
+
+    }else if (self.pickerType == VPickerTypeMutiColsFromArray) {
+        
+        _resultString = @"";
+        
+        if (![self.componentArray containsObject:@(component)]) {
+            [self.componentArray addObject:@(component)];
+        }
+        
+        for (int i=0; i<_dataSource.count;i++) {
+            if ([self.componentArray containsObject:@(i)]) {
+                NSInteger cIndex = [pickerView selectedRowInComponent:i];
+
+                    _resultString=[NSString stringWithFormat:@"%@-%@",_resultString, _dataSource[i][cIndex]];
+                
+            }else{
+    
+                    _resultString = [NSString stringWithFormat:@"%@-%@",_resultString, _dataSource[i][0]];
+                
+            }
+        }
+    }else if(self.pickerType == VPickerTypeMutiColsFromDic){
+        if (component==0) {
+            _state =_dicKeyArray[row][0];
+        }else{
+            NSInteger cIndex = [pickerView selectedRowInComponent:0];
+            NSDictionary *dicValueDic=_dataSource[cIndex];
+            NSArray *dicValueArray=[dicValueDic allValues][0];
+            if (dicValueArray.count>row) {
+                _city =dicValueArray[row];
+            }
+        }
+    }
+}
 
 
 #pragma mark - helper
@@ -163,25 +334,26 @@
     return array;
 }
 
+
 -(void)setArrayClass:(NSArray *)array{
+    
     _dicKeyArray=[[NSMutableArray alloc] init];
-    for (id levelTwo in array) {
+    
+    for (id item in array) {
         
-        if ([levelTwo isKindOfClass:[NSArray class]]) {
-            _isLevelArray=YES;
-            _isLevelString=NO;
-            _isLevelDic=NO;
+        if ([item isKindOfClass:[NSArray class]]) {
             
-        }else if ([levelTwo isKindOfClass:[NSString class]]) {
-            _isLevelString=YES;
-            _isLevelArray=NO;
-            _isLevelDic=NO;
+            self.pickerType = VPickerTypeMutiColsFromArray;
             
-        }else if ([levelTwo isKindOfClass:[NSDictionary class]]) {
-            _isLevelDic=YES;
-            _isLevelString=NO;
-            _isLevelArray=NO;
-            _levelTwoDic=levelTwo;
+        }else if ([item isKindOfClass:[NSString class]]) {
+            
+            self.pickerType = VPickerTypeSingleCols;
+            
+        }else if ([item isKindOfClass:[NSDictionary class]]) {
+            
+            self.pickerType = VPickerTypeMutiColsFromDic;
+            
+            _levelTwoDic = item;
             [_dicKeyArray addObject:[_levelTwoDic allKeys]];
         }
     }
@@ -196,7 +368,6 @@
     
     self.frame = CGRectMake(0, viewY, viewW, viewH);
 }
-
 
 -(void)setUpPickView{
     UIPickerView *pickView=[[UIPickerView alloc] init];
@@ -226,10 +397,17 @@
     [self addSubview:datePicker];
 }
 
+
+#pragma mark - UIToolBar
+
 -(void)setUpToolBar{
     _toolbar=[self setToolbarStyle];
     [self setToolbarWithPickViewFrame];
     [self addSubview:_toolbar];
+}
+
+-(void)setToolbarWithPickViewFrame{
+    _toolbar.frame=CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.width, ZHToobarHeight);
 }
 
 -(UIToolbar *)setToolbarStyle{
@@ -245,118 +423,6 @@
     return toolbar;
 }
 
-
--(void)setToolbarWithPickViewFrame{
-    _toolbar.frame=CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.width, ZHToobarHeight);
-}
-
-
-
-#pragma mark piackView 数据源方法
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    
-    NSInteger component;
-    if (_isLevelArray) {
-        component = _plistArray.count;
-    } else if (_isLevelString){
-        component = 1;
-    }else if(_isLevelDic){
-        component=[_levelTwoDic allKeys].count*2;
-    }
-    return component;
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    NSArray *rowArray=[[NSArray alloc] init];
-    if (_isLevelArray) {
-        rowArray=_plistArray[component];
-        
-    }else if (_isLevelString){
-        rowArray = _plistArray;
-        
-    }else if (_isLevelDic){
-        NSInteger pIndex = [pickerView selectedRowInComponent:0];
-        NSDictionary *dic=_plistArray[pIndex];
-        for (id dicValue in [dic allValues]) {
-            if ([dicValue isKindOfClass:[NSArray class]]) {
-                if (component%2==1) {
-                    rowArray=dicValue;
-                }else{
-                    rowArray=_plistArray;
-                }
-            }
-        }
-    }
-    return rowArray.count;
-}
-
-#pragma mark UIPickerViewdelegate
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
-    
-    NSString *rowTitle=nil;
-    
-    if (_isLevelArray) {
-        rowTitle=_plistArray[component][row];
-        
-    }else if (_isLevelString){
-        rowTitle=_plistArray[row];
-        
-    }else if (_isLevelDic){
-        NSInteger pIndex = [pickerView selectedRowInComponent:0];
-        NSDictionary *dic=_plistArray[pIndex];
-        
-        if(component%2==0){
-            rowTitle=_dicKeyArray[row][component];
-        }
-        
-        for (id aa in [dic allValues]) {
-            if ([aa isKindOfClass:[NSArray class]]&&component%2==1){
-                NSArray *bb=aa;
-                if (bb.count>row) {
-                    rowTitle=aa[row];
-                }
-            }
-        }
-    }
-    
-    return rowTitle;
-}
-
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    
-    if (_isLevelDic&&component%2==0) {
-        [pickerView reloadComponent:1];
-        [pickerView selectRow:0 inComponent:1 animated:YES];
-    }
-    
-    if (_isLevelArray){
-        _resultString=@"";
-        if (![self.componentArray containsObject:@(component)]) {
-            [self.componentArray addObject:@(component)];
-        }
-        for (int i=0; i<_plistArray.count;i++) {
-            if ([self.componentArray containsObject:@(i)]) {
-                NSInteger cIndex = [pickerView selectedRowInComponent:i];
-                _resultString=[NSString stringWithFormat:@"%@%@",_resultString,_plistArray[i][cIndex]];
-            }else{
-                _resultString=[NSString stringWithFormat:@"%@%@",_resultString,_plistArray[i][0]];
-            }
-        }
-    }else if (_isLevelDic){
-        if (component==0) {
-            _state =_dicKeyArray[row][0];
-        }else{
-            NSInteger cIndex = [pickerView selectedRowInComponent:0];
-            NSDictionary *dicValueDic=_plistArray[cIndex];
-            NSArray *dicValueArray=[dicValueDic allValues][0];
-            if (dicValueArray.count>row) {
-                _city =dicValueArray[row];
-            }
-        }
-    }
-}
 
 
 

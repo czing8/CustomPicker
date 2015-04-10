@@ -17,7 +17,6 @@
 -(void)pickerView:(VPickerView *)pickView resultSelectedRow:(NSUInteger)row;
 -(void)pickerView:(VPickerView *)pickView resultString:(NSString *)resultString;
 
-
 @end
 
 
@@ -29,12 +28,9 @@
  *  通过plistName添加一个pickView
  *
  *  @param plistName          plist文件的名字
- 
- *  @param isHaveNavControler 是否在NavControler之内
  *
  *  @return 带有toolbar的pickview
  */
-
 -(instancetype)initPickviewWithPlistName:(NSString *)plistName;
 
 
@@ -42,7 +38,6 @@
  *  通过plistName添加一个pickView
  *
  *  @param array              需要显示的数组
- *  @param isHaveNavControler 是否在NavControler之内
  *
  *  @return 带有toolbar的pickview
  */
@@ -53,7 +48,6 @@
  *  通过时间创建一个DatePicker
  *
  *  @param date               默认选中时间
- *  @param isHaveNavControler是否在NavControler之内
  *
  *  @return 带有toolbar的datePicker
  */
