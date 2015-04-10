@@ -99,12 +99,26 @@ typedef NS_ENUM(NSInteger, VPickerType){
 }
 
 -(void)remove{
-    [self removeFromSuperview];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, 0);
+        
+    } completion:^(BOOL finished){
+        [self removeFromSuperview];
+    }];
 }
 
 
 -(void)show{
     [[UIApplication sharedApplication].keyWindow addSubview:self];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        CGFloat viewH = _pickeViewHeight + ZHToobarHeight;
+        CGFloat viewY = [UIScreen mainScreen].bounds.size.height - viewH;
+        CGFloat viewW = [UIScreen mainScreen].bounds.size.width;
+        
+        self.frame = CGRectMake(0, viewY, viewW, viewH);
+    }];
 }
 
 
@@ -360,13 +374,8 @@ typedef NS_ENUM(NSInteger, VPickerType){
 }
 
 -(void)setViewFrame{
-    CGFloat viewH = _pickeViewHeight + ZHToobarHeight;
-    CGFloat viewY;
     
-    viewY= [UIScreen mainScreen].bounds.size.height - viewH;
-    CGFloat viewW = [UIScreen mainScreen].bounds.size.width;
-    
-    self.frame = CGRectMake(0, viewY, viewW, viewH);
+    self.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height,  [UIScreen mainScreen].bounds.size.width, 0);
 }
 
 -(void)setUpPickView{
@@ -396,7 +405,6 @@ typedef NS_ENUM(NSInteger, VPickerType){
     _pickeViewHeight=datePicker.frame.size.height;
     [self addSubview:datePicker];
 }
-
 
 #pragma mark - UIToolBar
 

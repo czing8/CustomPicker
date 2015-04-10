@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1635AC11AD77B5100782CC8 /* 多组数据.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1635ABF1AD77B5100782CC8 /* 多组数据.plist */; };
+		F1635AC21AD77B5100782CC8 /* 一组数据.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1635AC01AD77B5100782CC8 /* 一组数据.plist */; };
+		F1635AC41AD77B5E00782CC8 /* city.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1635AC31AD77B5E00782CC8 /* city.plist */; };
 		F1E1B3051AD247B20014391C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E1B3041AD247B20014391C /* main.m */; };
 		F1E1B3081AD247B20014391C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E1B3071AD247B20014391C /* AppDelegate.m */; };
 		F1E1B30B1AD247B20014391C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E1B30A1AD247B20014391C /* ViewController.m */; };
@@ -28,6 +31,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F1635ABF1AD77B5100782CC8 /* 多组数据.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "多组数据.plist"; sourceTree = "<group>"; };
+		F1635AC01AD77B5100782CC8 /* 一组数据.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "一组数据.plist"; sourceTree = "<group>"; };
+		F1635AC31AD77B5E00782CC8 /* city.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = city.plist; sourceTree = "<group>"; };
 		F1E1B2FF1AD247B20014391C /* CustomPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E1B3031AD247B20014391C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1E1B3041AD247B20014391C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -100,6 +106,9 @@
 		F1E1B3021AD247B20014391C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F1635ABF1AD77B5100782CC8 /* 多组数据.plist */,
+				F1635AC01AD77B5100782CC8 /* 一组数据.plist */,
+				F1635AC31AD77B5E00782CC8 /* city.plist */,
 				F1E1B3031AD247B20014391C /* Info.plist */,
 				F1E1B3041AD247B20014391C /* main.m */,
 			);
@@ -212,7 +221,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1635AC11AD77B5100782CC8 /* 多组数据.plist in Resources */,
+				F1635AC21AD77B5100782CC8 /* 一组数据.plist in Resources */,
 				F1E1B30E1AD247B20014391C /* Main.storyboard in Resources */,
+				F1635AC41AD77B5E00782CC8 /* city.plist in Resources */,
 				F1E1B3131AD247B20014391C /* LaunchScreen.xib in Resources */,
 				F1E1B3101AD247B20014391C /* Images.xcassets in Resources */,
 			);

@@ -13,19 +13,20 @@
 
 @property (nonatomic, strong) VPickerView *pickerView;
 
+@property (weak, nonatomic) IBOutlet UITextField *txtBirth;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    _pickerView = [[VPickerView alloc] initPickviewWithArray:@[@"2", @"3", @"4"]];
+    _pickerView.delegate = self;
+    _txtBirth.inputView = _pickerView;
 }
 
 - (IBAction)click:(id)sender {
-    if (_pickerView) {
-        [_pickerView remove];
-    }
     
     _pickerView = [[VPickerView alloc] initPickviewWithArray:@[@"2", @"3", @"4"]];
 
@@ -36,9 +37,7 @@
 
 
 - (IBAction)mutiPickerClick:(id)sender {
-    if (_pickerView) {
-        [_pickerView remove];
-    }
+
     
     _pickerView = [[VPickerView alloc] initPickviewWithArray:@[@[@"1",@"小明",@"aa"],@[@"2",@"大黄",@"bb"]]];
     _pickerView.delegate = self;
