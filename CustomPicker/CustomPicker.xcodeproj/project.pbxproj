@@ -14,7 +14,7 @@
 		F1E1B3101AD247B20014391C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1E1B30F1AD247B20014391C /* Images.xcassets */; };
 		F1E1B3131AD247B20014391C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1E1B3111AD247B20014391C /* LaunchScreen.xib */; };
 		F1E1B31F1AD247B20014391C /* CustomPickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E1B31E1AD247B20014391C /* CustomPickerTests.m */; };
-		F1E1B32B1AD247E20014391C /* VPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E1B32A1AD247E20014391C /* VPickerView.m */; };
+		F1E28DDB1AD65F89003292A3 /* VPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E28DDA1AD65F89003292A3 /* VPickerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +41,8 @@
 		F1E1B3181AD247B20014391C /* CustomPickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CustomPickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E1B31D1AD247B20014391C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1E1B31E1AD247B20014391C /* CustomPickerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomPickerTests.m; sourceTree = "<group>"; };
-		F1E1B3291AD247E20014391C /* VPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPickerView.h; sourceTree = "<group>"; };
-		F1E1B32A1AD247E20014391C /* VPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPickerView.m; sourceTree = "<group>"; };
+		F1E28DD91AD65F89003292A3 /* VPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPickerView.h; sourceTree = "<group>"; };
+		F1E28DDA1AD65F89003292A3 /* VPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPickerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +84,7 @@
 		F1E1B3011AD247B20014391C /* CustomPicker */ = {
 			isa = PBXGroup;
 			children = (
-				F1E1B3281AD247C90014391C /* CustomPicker */,
+				F1E28DD81AD65F89003292A3 /* VPickerView */,
 				F1E1B3061AD247B20014391C /* AppDelegate.h */,
 				F1E1B3071AD247B20014391C /* AppDelegate.m */,
 				F1E1B3091AD247B20014391C /* ViewController.h */,
@@ -123,13 +123,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F1E1B3281AD247C90014391C /* CustomPicker */ = {
+		F1E28DD81AD65F89003292A3 /* VPickerView */ = {
 			isa = PBXGroup;
 			children = (
-				F1E1B3291AD247E20014391C /* VPickerView.h */,
-				F1E1B32A1AD247E20014391C /* VPickerView.m */,
+				F1E28DD91AD65F89003292A3 /* VPickerView.h */,
+				F1E28DDA1AD65F89003292A3 /* VPickerView.m */,
 			);
-			path = CustomPicker;
+			path = VPickerView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,7 +235,7 @@
 				F1E1B30B1AD247B20014391C /* ViewController.m in Sources */,
 				F1E1B3081AD247B20014391C /* AppDelegate.m in Sources */,
 				F1E1B3051AD247B20014391C /* main.m in Sources */,
-				F1E1B32B1AD247E20014391C /* VPickerView.m in Sources */,
+				F1E28DDB1AD65F89003292A3 /* VPickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +426,7 @@
 				F1E1B3241AD247B20014391C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F1E1B3251AD247B20014391C /* Build configuration list for PBXNativeTarget "CustomPickerTests" */ = {
 			isa = XCConfigurationList;
@@ -434,6 +435,7 @@
 				F1E1B3271AD247B20014391C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

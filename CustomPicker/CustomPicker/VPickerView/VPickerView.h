@@ -14,7 +14,9 @@
 
 @optional
 
--(void)toobarDonBtnHaveClick:(VPickerView *)pickView result:(NSString *)result;
+-(void)pickerView:(VPickerView *)pickView resultSelectedRow:(NSUInteger)row;
+-(void)pickerView:(VPickerView *)pickView resultString:(NSString *)resultString;
+
 
 @end
 
@@ -33,7 +35,7 @@
  *  @return 带有toolbar的pickview
  */
 
--(instancetype)initPickviewWithPlistName:(NSString *)plistName isHaveNavControler:(BOOL)isHaveNavControler;
+-(instancetype)initPickviewWithPlistName:(NSString *)plistName;
 
 
 /**
@@ -44,7 +46,7 @@
  *
  *  @return 带有toolbar的pickview
  */
--(instancetype)initPickviewWithArray:(NSArray *)array isHaveNavControler:(BOOL)isHaveNavControler;
+-(instancetype)initPickviewWithArray:(NSArray *)array;
 
 
 /**
@@ -55,7 +57,7 @@
  *
  *  @return 带有toolbar的datePicker
  */
--(instancetype)initDatePickWithDate:(NSDate *)defaulDate datePickerMode:(UIDatePickerMode)datePickerMode isHaveNavControler:(BOOL)isHaveNavControler;
+-(instancetype)initDatePickWithDate:(NSDate *)defaulDate datePickerMode:(UIDatePickerMode)datePickerMode;
 
 /**
  *   移除本控件

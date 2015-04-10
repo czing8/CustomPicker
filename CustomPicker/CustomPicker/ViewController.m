@@ -11,8 +11,7 @@
 
 @interface ViewController ()<VPickViewDelegate>
 
-@property(nonatomic,strong)VPickerView *pickerView;
-
+@property (nonatomic, strong) VPickerView *pickerView;
 
 @end
 
@@ -26,18 +25,16 @@
 
 - (IBAction)click:(id)sender {
     
-    _pickerView = [[VPickerView alloc] initPickviewWithArray:@[@"2", @"3", @"4"] isHaveNavControler:NO];
+    _pickerView = [[VPickerView alloc] initPickviewWithArray:@[@"2", @"3", @"4"]];
 
     _pickerView.delegate = self;
 
     [_pickerView show];
 }
 
-
--(void)toobarDonBtnHaveClick:(VPickerView *)pickView result:(NSString *)result{
-    NSLog(@"result:%@", result);
+- (void)pickerView:(VPickerView *)pickView resultSelectedRow:(NSUInteger)row{
+    NSLog(@"row:%lu", (unsigned long)row);
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
